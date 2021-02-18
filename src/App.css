@@ -19,7 +19,7 @@ div#root{
 }
 
 /* Full-width inputs */
-input[type=text], input[type=password] {
+.full-width-field {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -30,11 +30,11 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #000;
+  padding: 5px 14px;
   margin: 8px 0;
-  border: none;
   cursor: pointer;
   width: auto;
 }

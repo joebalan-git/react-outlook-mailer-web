@@ -6,14 +6,10 @@ function App() {
     <div className="wrapper">
       <form method="post">
         <div className="container">
-          <label htmlFor="uname"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="uname" required />
-
-          <label htmlFor="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required />
-
+          <input type="email" className="full-width-field" placeholder="Login" name="uname" required />
+          <input type="password" className="full-width-field" placeholder="Password" name="psw" required />
           <div className="text-center">
-            <button type="submit">Login</button>
+            <button type="submit">Enter</button>
           </div>
         </div>
       </form>
