@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import Login from './Login';
+import Routes from "./Routes";
+import { AppContext } from "./libs/context";
 
 function App() {
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+
   return (
-    <Login />
+    <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+      <Routes />
+    </AppContext.Provider>
   );
 }
 

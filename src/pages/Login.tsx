@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAppContext } from "../libs/context";
 
 interface Props {
   // onSubmit: () => void;
@@ -12,6 +13,8 @@ const Login: React.FC<Props> = () => {
   	const defaultAlertBox = {type: '', message: ''};
   	const [alertBox, setAlertBox] = useState(defaultAlertBox);
 
+  	const { userHasAuthenticated } = useAppContext();
+
 	function handleSubmit(event: any) {
 		event.preventDefault();
 
@@ -19,6 +22,7 @@ const Login: React.FC<Props> = () => {
 
 		try {
 		    //await Auth.signIn(email, password);
+		    userHasAuthenticated(true);
 		    setAlertBox({type: 'success', message: 'Login success'})
 	  	} catch (e) {
 		    setAlertBox({type: 'error', message: 'Invalid credentials'})
@@ -28,7 +32,7 @@ const Login: React.FC<Props> = () => {
 	return (
 		<div className="wrapper">
 	      	<form onSubmit={handleSubmit}>
-	        	<div className="p-16">
+	        	<div className="container">
 	          		<input type="email" className="full-width-field" placeholder="Login" name="uname" required value={email} onChange={(e) => setEmail(e.target.value)} />
 	          		<input type="password" className="full-width-field" placeholder="Password" name="psw" required value={password} onChange={(e) => setPassword(e.target.value)} />
 	          		<div className="text-center">
