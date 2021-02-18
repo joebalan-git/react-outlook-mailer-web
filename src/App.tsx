@@ -1,24 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { FormGroup, Label, Input, Message } from "./Styles";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <FormGroup>
+        <Label htmlFor="label">Label</Label>
+        <Input id="label" />
+        <Message>This is the validation message</Message>
+      </FormGroup>
+      <FormGroup>
+        <Label>Label 2</Label>
+        <Input />
+        <Message>This is the validation message</Message>
+      </FormGroup>
     </div>
   );
 }
