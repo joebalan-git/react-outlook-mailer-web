@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import { useAppContext } from "../libs/context";
 
-interface Props {
-  // onSubmit: () => void;
-}
-
-const Login: React.FC<Props> = () => {
+const Login: React.FC = () => {
 	
 	const [email, setEmail] = useState("");
   	const [password, setPassword] = useState("");
@@ -15,13 +13,13 @@ const Login: React.FC<Props> = () => {
 
   	const { userHasAuthenticated } = useAppContext();
 
-	function handleSubmit(event: any) {
+	async function handleSubmit(event: any) {
 		event.preventDefault();
 
 		setAlertBox(defaultAlertBox)
 
 		try {
-		    //await Auth.signIn(email, password);
+		    await axios.post('/login', { email, password });
 		    userHasAuthenticated(true);
 		    setAlertBox({type: 'success', message: 'Login success'})
 	  	} catch (e) {
