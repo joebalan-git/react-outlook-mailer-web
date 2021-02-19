@@ -1,16 +1,19 @@
-.HomeContainer{
-	margin: 0px auto;
-	max-width: 1200px;
+nav.navbar {
+	padding: 0;
 }
 
-.NavBarWrapper{
-	display: flex;
+.search{
+	padding: 5px 14px;
+    border: 1px solid #000;
+    width: 250px;
+}
+.w-160{
+	width: 160px;
 }
 
-.NavBarItem{
-
-}
-
-.Button{
-
+img.avatar{
+	border-radius: 20px;
+	width: 30px;
+    height: 30px;
+    margin: 0 10px;
 }

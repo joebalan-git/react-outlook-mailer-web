@@ -1,4 +1,5 @@
 import { setupWorker, rest } from 'msw'
+import { DEFAULT_MAILS } from './data/mails';
 
 interface LoginBody {
   email: string,
@@ -12,6 +13,8 @@ interface LoginResponse {
   avatar: string
 }
 */
+
+let all_mails = [...DEFAULT_MAILS];
 
 const worker = setupWorker(
   // TODO: response was throwing error on LoginResponse so had to set it as any
@@ -37,6 +40,30 @@ const worker = setupWorker(
           status: false,
           message: 'Invalid Credentials',
           data: {}
+        })
+      )
+  }),
+
+
+
+  rest.post<any, any>('/mails', (req, res, ctx) => {
+    const { mailFilterType, mailFilterSearch } = req.body
+
+    let filteredMails = all_mails.filter((m) => {
+      if(!mailFilterType && !mailFilterSearch) return true;
+      return ((mailFilterType && ((mailFilterType === 'NEW' && m.isNew) || (mailFilterType === 'ARCHIVED' && m.isArchived))) || 
+        (mailFilterSearch && (m.title.indexOf(mailFilterSearch) > -1 || (m.description && m.description.indexOf(mailFilterSearch) > -1))))
+    });
+
+    return res(
+        ctx.status(200),
+        ctx.json({ 
+          status: true,
+          message: 'Mails fetch success',
+          data: filteredMails,
+          newTotal: all_mails.filter((m) => m.isNew).length,
+          archivedTotal: all_mails.filter((m) => m.isArchived).length,
+          total: all_mails.length
         })
       )
   }),
