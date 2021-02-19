@@ -16,10 +16,20 @@ const Home: React.FC = () => {
 	}
 
   	return (
-    	<div className="Home">
-      		<div className="lander">
-    			<h1>Scratch</h1>
-        		<p className="text-muted">A simple note taking app</p>
+    	<div className="HomeContainer">
+      		<div className="NavBarWrapper">
+      			<div className="NavBarItem">
+    				<button type="button" className="">NEW : {  }</button>
+      			</div>
+      			<div className="NavBarItem">
+    				<button type="button" className="">ARCHIVED : {  }</button>
+      			</div>
+      			<div className="NavBarItem">
+    				<button type="button" className="">TOTAL : {  }</button>
+      			</div>
+      			<div className="NavBarItem">
+    				<button type="button" className="">New : {  }</button>
+      			</div>
       		</div>
     	</div>
   	);

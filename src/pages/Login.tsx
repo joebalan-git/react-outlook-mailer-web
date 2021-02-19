@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
+import { Form } from "react-bootstrap";
 import axios from 'axios';
+
+import "./Login.css";
+import LoaderButton from "../components/LoaderButton";
 
 import { useAppContext } from "../libs/context";
 
@@ -15,9 +19,12 @@ const Login: React.FC = () => {
   	const { userHasAuthenticated } = useAppContext();
   	const history = useHistory();
 
+  	const [isLoading, setIsLoading] = useState(false);
+
 	async function handleSubmit(event: any) {
 		event.preventDefault();
 
+		setIsLoading(true);
 		setAlertBox(defaultAlertBox)
 
 		try {
@@ -30,21 +37,35 @@ const Login: React.FC = () => {
 		    }, 100);
 	  	} catch (e) {
 		    setAlertBox({type: 'error', message: 'Invalid credentials'})
+		    setIsLoading(false);
 	  	}
 	}
 
 	return (
-		<div className="wrapper">
-	      	<form onSubmit={handleSubmit}>
-	        	<div className="container">
-	          		<input type="email" className="full-width-field" placeholder="Login" name="uname" required value={email} onChange={(e) => setEmail(e.target.value)} />
-	          		<input type="password" className="full-width-field" placeholder="Password" name="psw" required value={password} onChange={(e) => setPassword(e.target.value)} />
-	          		<div className="text-center">
-	            		<button type="submit">Enter</button>
-			        	<p className={alertBox.type}>{alertBox.message}</p>
-	          		</div>
-	        	</div>
-	      	</form>
+		<div className="Login">
+	      <Form onSubmit={handleSubmit}>
+	        <Form.Group controlId="email">
+	          <Form.Label>Email</Form.Label>
+	          <Form.Control
+	            autoFocus
+	            type="email"
+	            value={email}
+	            onChange={(e) => setEmail(e.target.value)}
+	          />
+	        </Form.Group>
+	        <Form.Group controlId="password">
+	          <Form.Label>Password</Form.Label>
+	          <Form.Control
+	            type="password"
+	            value={password}
+	            onChange={(e) => setPassword(e.target.value)}
+	          />
+	        </Form.Group>
+	        <div className="text-center">
+		        <LoaderButton isLoading={isLoading}>Enter</LoaderButton>
+	        	<p className={alertBox.type}>{alertBox.message}</p>
+	        </div>
+	      </Form>
 	    </div>
 	)
 }

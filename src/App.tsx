@@ -21,6 +21,8 @@ function App() {
       if(localStorage.getItem('user_token')){
         userHasAuthenticated(true);
         history.push("/")
+      } else {
+        history.push("/login")
       }
     }
     catch(e) {}
