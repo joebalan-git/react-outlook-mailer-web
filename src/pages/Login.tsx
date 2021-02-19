@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 import { useAppContext } from "../libs/context";
@@ -12,6 +13,7 @@ const Login: React.FC = () => {
   	const [alertBox, setAlertBox] = useState(defaultAlertBox);
 
   	const { userHasAuthenticated } = useAppContext();
+  	const history = useHistory();
 
 	async function handleSubmit(event: any) {
 		event.preventDefault();
@@ -19,9 +21,13 @@ const Login: React.FC = () => {
 		setAlertBox(defaultAlertBox)
 
 		try {
-		    await axios.post('/login', { email, password });
+		    let response = await axios.post('/login', { email, password });
+		    localStorage.setItem('user_token', JSON.stringify(response.data));
 		    userHasAuthenticated(true);
 		    setAlertBox({type: 'success', message: 'Login success'})
+		    setTimeout(() => {
+		    	history.push("/");
+		    }, 100);
 	  	} catch (e) {
 		    setAlertBox({type: 'error', message: 'Invalid credentials'})
 	  	}
