@@ -16,6 +16,7 @@ const Home: React.FC = () => {
 	const history = useHistory();
 
 	const [mails, setMails] = useState<MailProtocol[]>([]);
+	const [mailDetail, setMailDetail] = useState({});
   	const [newTotal, setNewTotal] = useState(0);
   	const [archivedTotal, setArchivedTotal] = useState(0);
   	const [total, setTotal] = useState(0);
@@ -82,10 +83,16 @@ const Home: React.FC = () => {
 	    );
 	}
 
+	function renderMailDetail(){
+		return (
+			<h1>Test</h1>
+		)
+	}
+
   	return (
 		<div className="App container py-3">
-	      <Container>
-      		  <Row>
+	      <Container className="main-container">
+      		  <Row className="b-b-1-solid p-b-10">
 			    <Col md={8}>
 			    	<Navbar collapseOnSelect expand="md">
 				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('NEW')}>NEW : { newTotal }</button>
@@ -101,14 +108,16 @@ const Home: React.FC = () => {
 		          	<button type="button" className="font-weight-bold m-0" onClick={handleLogout}>EXIT <FaSignOutAlt /></button>
 			    </Col>
 			  </Row>
-			  <Row style={{ height: '400px', overflow: 'auto' }}>
-			    <Col md={3}>
-			    	<>
+			  <Row className="mails-container">
+			    <Col md={3} className="m-0 p-0 b-r-1-solid">
+			    	<div className="card-list-wrapper">
 			      		{ !isLoading && renderMailList() }
-	    			</>
+	    			</div>
 			    </Col>
 			    <Col md={9}>
-			      
+			      <>
+			      	{ !isLoading && renderMailDetail() }
+			      </>
 			    </Col>
 			  </Row>
 		  </Container>
