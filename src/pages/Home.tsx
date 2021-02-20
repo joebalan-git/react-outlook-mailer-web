@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { Navbar, Container, Row, Col, Image, Card } from "react-bootstrap";
+import { Navbar, Container, Row, Col, Image, Card, Button } from "react-bootstrap";
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 
@@ -16,15 +16,18 @@ const Home: React.FC = () => {
 	const history = useHistory();
 
 	const [mails, setMails] = useState<MailProtocol[]>([]);
-	const [mailDetail, setMailDetail] = useState({});
+	const [mailDetailId, setMailDetailId] = useState<number>(0);
+
   	const [newTotal, setNewTotal] = useState(0);
   	const [archivedTotal, setArchivedTotal] = useState(0);
   	const [total, setTotal] = useState(0);
 
+	const [isReplyEnabled, setReplyEnabled] = useState(false);
+  	
   	const [isLoading, setIsLoading] = useState(true);
 
 
-  	const [mailFilterType, setMailFilterType] = useState("");
+  	const [mailFilterType, setMailFilterType] = useState("TOTAL");
   	const [mailFilterSearch, setMailFilterSearch] = useState("");
 
   	useEffect(() => {
@@ -34,6 +37,8 @@ const Home: React.FC = () => {
 		    }
 
 		    try {
+		      setMailDetailId(0)
+
 		      const mails: any = await loadMails();
 		      setMails(mails.data.data);
 		      setNewTotal(mails.data.newTotal);
@@ -48,6 +53,10 @@ const Home: React.FC = () => {
 	  	
 	  	onLoad();
 	}, [isAuthenticated, mailFilterType, mailFilterSearch]);
+
+	useEffect(() => {
+		renderMailDetail()
+	}, [mails]);
 
 	const debouncedSave = useCallback(
 		debounce(newValue => setMailFilterSearch(newValue), 300),
@@ -72,9 +81,9 @@ const Home: React.FC = () => {
 
 	function renderMailList() {
 	    return (
-	    	mails.map(({ title, description, isNew, isArchived }, index) => (
-		    	<Card key={index}>
-				  <Card.Body>
+	    	mails.map(({ id, title, description, isNew, isArchived }, index) => (
+		    	<Card key={index} onClick={() => setMailDetailId(id)}>
+				  <Card.Body className="pt-10">
 				    <Card.Title>{title}</Card.Title>
 				    <Card.Text>{description}</Card.Text>
 				  </Card.Body>
@@ -84,9 +93,64 @@ const Home: React.FC = () => {
 	}
 
 	function renderMailDetail(){
+		let mailDetail = mails.find(m => m.id === mailDetailId);
+
 		return (
-			<h1>Test</h1>
+			mailDetail ?
+
+				<Row className="p-t-10">
+					{ isReplyEnabled ? 
+						(
+							<Col md={12} className="text-right">
+								<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={sendReplyHandler}>SEND</Button>
+								<Button type="button" className="LoaderButton btn-secondary font-weight-bold m-0" onClick={cancelReplyHandler}>CANCEL</Button>
+							</Col>
+						)
+					:
+						(
+							<>
+								<Col md={6} className="">
+									<Card.Title className="m-t-10">{mailDetail.title}</Card.Title>
+								</Col>
+								<Col md={6} className="text-right">
+									<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={replyHandler}>REPLY</Button>
+									<Button type="button" className="LoaderButton btn-danger font-weight-bold m-r-10" onClick={deleteHandler}>DELETE</Button>
+									{ mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(false)}>ROLLBACK</Button> }
+									{ !mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(false)}>ARCHIVE</Button>}
+								</Col>
+							</>
+						)
+					}
+				</Row>
+			:
+			<></>
+
 		)
+	}
+
+	function replyHandler(){
+		setReplyEnabled(true);
+	}
+
+	function deleteHandler(){
+
+	}
+
+	function archiveHandler(flag: boolean){
+		setMails(mails.map(m => {
+			if(m.id === mailDetailId){
+				m.isArchived = flag;
+			}
+			return m;
+		}))
+	}
+
+	function sendReplyHandler(){
+		setReplyEnabled(false);
+	}
+
+	function cancelReplyHandler(){
+		setReplyEnabled(false);
 	}
 
   	return (
@@ -97,7 +161,7 @@ const Home: React.FC = () => {
 			    	<Navbar collapseOnSelect expand="md">
 				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('NEW')}>NEW : { newTotal }</button>
 				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('ARCHIVED')}>ARCHIVED : { archivedTotal }</button>
-				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('')}>TOTAL : { total }</button>
+				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('TOTAL')}>TOTAL : { total }</button>
 				          <div>
 				          	<input type="text" placeholder="Search" onChange={setFilterSearch}className="search" />
 				          </div>
@@ -105,7 +169,7 @@ const Home: React.FC = () => {
 			    </Col>
 			    <Col md={4} className="text-right">
 			    	<Image className="avatar" src={avatar} />
-		          	<button type="button" className="font-weight-bold m-0" onClick={handleLogout}>EXIT <FaSignOutAlt /></button>
+		          	<Button type="button" className="LoaderButton btn-danger font-weight-bold m-0" onClick={handleLogout}><FaSignOutAlt /> EXIT</Button>
 			    </Col>
 			  </Row>
 			  <Row className="mails-container">

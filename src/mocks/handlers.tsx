@@ -51,7 +51,7 @@ const worker = setupWorker(
 
     let filteredMails = all_mails.filter((m) => {
       if(!mailFilterType && !mailFilterSearch) return true;
-      return ((mailFilterType && ((mailFilterType === 'NEW' && m.isNew) || (mailFilterType === 'ARCHIVED' && m.isArchived))) || 
+      return ((mailFilterType && ((mailFilterType === 'NEW' && m.isNew) || (mailFilterType === 'ARCHIVED' && m.isArchived) || (mailFilterType === 'TOTAL' && !m.isArchived))) || 
         (mailFilterSearch && (m.title.toLowerCase().indexOf(mailFilterSearch.toLowerCase()) > -1 || (m.description && m.description.toLowerCase().indexOf(mailFilterSearch.toLowerCase()) > -1))))
     });
 
