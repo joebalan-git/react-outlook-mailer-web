@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { Navbar, Container, Row, Col, Image, Card } from "react-bootstrap";
 import axios from 'axios';
+import debounce from 'lodash.debounce';
 
 import "./Home.css";
 import avatar from "../assets/avatar.png";
@@ -26,29 +27,33 @@ const Home: React.FC = () => {
   	const [mailFilterSearch, setMailFilterSearch] = useState("");
 
   	useEffect(() => {
-	  async function onLoad() {
-	    if (!isAuthenticated) {
-	      return;
-	    }
+		async function onLoad() {
+		    if (!isAuthenticated) {
+		      return;
+		    }
 
-	    try {
-	      const mails: any = await loadMails();
-	      setMails(mails.data.data);
-	      setNewTotal(mails.data.newTotal);
-	      setArchivedTotal(mails.data.archivedTotal);
-	      setTotal(mails.data.total);
-	    } catch (e) {
-	      alert(e);
-	    }
+		    try {
+		      const mails: any = await loadMails();
+		      setMails(mails.data.data);
+		      setNewTotal(mails.data.newTotal);
+		      setArchivedTotal(mails.data.archivedTotal);
+		      setTotal(mails.data.total);
+		    } catch (e) {
+		      alert(e);
+		    }
 
-	    setIsLoading(false);
-	  }
-
-	  onLoad();
+		    setIsLoading(false);
+	  	}
+	  	
+	  	onLoad();
 	}, [isAuthenticated, mailFilterType, mailFilterSearch]);
 
+	const debouncedSave = useCallback(
+		debounce(newValue => setMailFilterSearch(newValue), 300),
+		[], // will be created only once initially
+	);
 	function setFilterSearch(e: React.ChangeEvent<HTMLInputElement>){
-		setMailFilterSearch(e.target.value)
+		debouncedSave(e.target.value);
 	}
 
 	function loadMails() {
