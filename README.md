@@ -1,5 +1,5 @@
 # React JS Outlook Mailer
-[Preview] (https://joebalan-git.github.io/react-outlook-mailer-web/)
+[Preview](https://joebalan-git.github.io/react-outlook-mailer-web/)
 
 
 ## Getting Started with Create React App
