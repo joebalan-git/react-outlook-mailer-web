@@ -123,7 +123,7 @@ const worker = setupWorker(
   rest.delete<any, any>('/mail', (req, res, ctx) => {
     const id: number = Number(req.url.searchParams.get('id'))
 
-    all_mails = all_mails.filter(m => m.id != id)
+    all_mails = all_mails.filter(m => m.id !== id)
 
     return res(
         ctx.status(200),

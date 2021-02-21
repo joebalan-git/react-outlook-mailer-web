@@ -52,13 +52,16 @@ const Home: React.FC = () => {
 	  	}
 	  	
 	  	onLoad();
+	  	// eslint-disable-next-line
 	}, [isAuthenticated, refreshData, mailFilterType, mailFilterSearch]);
 
 	useEffect(() => {
 		renderMailList()
 		renderMailDetail()
+		// eslint-disable-next-line
 	}, [ mails ]);
 
+	// eslint-disable-next-line
 	const debouncedSave = useCallback(
 		debounce(newValue => setMailFilterSearch(newValue), 300),
 		[], // will be created only once initially
@@ -178,9 +181,9 @@ const Home: React.FC = () => {
       		  <Row className="b-b-1-solid p-b-10">
 			    <Col md={8}>
 			    	<Navbar collapseOnSelect expand="md">
-				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType == "NEW" ? "selected" : "")} onClick={() => applyMailFilter('NEW')}>NEW : { newTotal }</button>
-				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType == "ARCHIVED" ? "selected" : "")} onClick={() => applyMailFilter('ARCHIVED')}>ARCHIVED : { archivedTotal }</button>
-				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType == "TOTAL" ? "selected" : "")} onClick={() => applyMailFilter('TOTAL')}>TOTAL : { total }</button>
+				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType === "NEW" ? "selected" : "")} onClick={() => applyMailFilter('NEW')}>NEW : { newTotal }</button>
+				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType === "ARCHIVED" ? "selected" : "")} onClick={() => applyMailFilter('ARCHIVED')}>ARCHIVED : { archivedTotal }</button>
+				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType === "TOTAL" ? "selected" : "")} onClick={() => applyMailFilter('TOTAL')}>TOTAL : { total }</button>
 				          <div>
 				          	<input type="text" placeholder="Search" onChange={setFilterSearch}className="search" />
 				          </div>
