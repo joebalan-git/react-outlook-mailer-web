@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import { Navbar, Container, Row, Col, Image, Card, Button } from "react-bootstrap";
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import MarkdownEditor from '@uiw/react-markdown-editor';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import "./Home.css";
 import avatar from "../assets/avatar.png";
@@ -30,6 +32,7 @@ const Home: React.FC = () => {
 
   	const [mailFilterType, setMailFilterType] = useState("TOTAL");
   	const [mailFilterSearch, setMailFilterSearch] = useState("");
+  	const [markdown, setMarkdown] = useState('');
 
   	useEffect(() => {
 		async function onLoad() {
@@ -108,10 +111,24 @@ const Home: React.FC = () => {
 				<Row className="p-t-10">
 					{ isReplyEnabled ? 
 						(
-							<Col md={12} className="text-right">
-								<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={sendReplyHandler}>SEND</Button>
-								<Button type="button" className="LoaderButton btn-secondary font-weight-bold m-0" onClick={cancelReplyHandler}>CANCEL</Button>
-							</Col>
+							<>
+								<Col md={6} className="">
+									<Card.Title className="m-t-10">{'Reply - ' + mailDetail.title}</Card.Title>
+								</Col>
+								<Col md={6} className="text-right">
+									<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={sendReplyHandler}>SEND</Button>
+									<Button type="button" className="LoaderButton btn-secondary font-weight-bold m-0" onClick={cancelReplyHandler}>CANCEL</Button>
+								</Col>
+								<Col md={12}>
+									<MarkdownEditor
+									  height={200}
+								      value=""
+								      onChange={(editor, data, value) => setMarkdown(value)}
+								    />
+								</Col>
+
+								<hr style={{ height: '4px', width: '100%' }}/>
+							</>
 						)
 					:
 						(
@@ -128,6 +145,9 @@ const Home: React.FC = () => {
 							</>
 						)
 					}
+					<Col md={12} className="p-t-10">
+						<MarkdownPreview source={mailDetail.rawDescription} />
+					</Col>
 				</Row>
 			:
 			<></>
@@ -136,6 +156,8 @@ const Home: React.FC = () => {
 	}
 
 	async function openMailHandler(id: number){
+		setReplyEnabled(false);
+
 		let response = await fetchMailDetails(id);
 		if(response.status){
 			setMailDetail(response.data.data);
@@ -148,6 +170,7 @@ const Home: React.FC = () => {
 	}
 
 	function replyHandler(){
+		setMarkdown('');
 		setReplyEnabled(true);
 	}
 
@@ -169,6 +192,7 @@ const Home: React.FC = () => {
 
 	function sendReplyHandler(){
 		setReplyEnabled(false);
+		console.log(markdown)
 	}
 
 	function cancelReplyHandler(){

@@ -81,3 +81,7 @@ div.mails-container{
 .filter_button:hover, .filter_button.selected{
 	background-color: lightblue;
 }
+
+.wmde-markdown h1, .wmde-markdown h2{
+	border: none !important;
+}
