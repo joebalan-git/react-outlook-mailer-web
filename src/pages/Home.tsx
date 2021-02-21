@@ -116,7 +116,7 @@ const Home: React.FC = () => {
 									<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={replyHandler}>REPLY</Button>
 									<Button type="button" className="LoaderButton btn-danger font-weight-bold m-r-10" onClick={deleteHandler}>DELETE</Button>
 									{ mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(false)}>ROLLBACK</Button> }
-									{ !mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(false)}>ARCHIVE</Button>}
+									{ !mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(true)}>ARCHIVE</Button>}
 								</Col>
 							</>
 						)
