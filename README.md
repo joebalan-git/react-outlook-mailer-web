@@ -1,6 +1,18 @@
 # React JS Outlook Mailer
 [Preview](https://joebalan-git.github.io/react-outlook-mailer-web/)
 
+To watch 
+	yarn start
+
+To build 
+	yarn build
+
+To deploy to gh-pages
+	yarn deploy
+
+To create msw to any directory...
+	npx msw init static
+
 
 ## Getting Started with Create React App
 
