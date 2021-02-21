@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# React JS Outlook Mailer
+[Preview] (https://joebalan-git.github.io/react-outlook-mailer-web/)
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
