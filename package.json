@@ -2,6 +2,7 @@
   "name": "react-outlook-mailer-web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://joebalan-git.github.io/react-outlook-mailer-web",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@testing-library/jest-dom": "^5.11.4",
@@ -44,7 +45,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -b master -d build",
+    "deploy": "gh-pages -b docs -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
