@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.7",
     "@uiw/react-markdown-editor": "^3.0.1",
+    "@uiw/react-markdown-preview": "^2.1.1",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "history": "^5.0.0",

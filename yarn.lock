@@ -2222,7 +2222,7 @@
     "@uiw/react-markdown-preview" "2.1.1"
     codemirror "5.59.2"
 
-"@uiw/react-markdown-preview@2.1.1":
+"@uiw/react-markdown-preview@2.1.1", "@uiw/react-markdown-preview@^2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@uiw/react-markdown-preview/-/react-markdown-preview-2.1.1.tgz#d6e8fadaf582f45f1dfede9da9dd604205112a1d"
   integrity sha512-0elyhbmBCZVfhT62cQuixREReFHWJZonZQy28cGHNn4Sr8ONC06R66UyqWjEMWdWFSLZrNdEZDsRVuqYX/oJGw==
