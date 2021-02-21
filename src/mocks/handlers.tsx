@@ -63,7 +63,54 @@ const worker = setupWorker(
           data: filteredMails,
           newTotal: all_mails.filter((m) => m.isNew).length,
           archivedTotal: all_mails.filter((m) => m.isArchived).length,
-          total: all_mails.length
+          total: all_mails.filter((m) => !m.isArchived).length
+        })
+      )
+  }),
+
+
+
+  rest.get<any, any>('/mail/detail', (req, res, ctx) => {
+    const id: number = Number(req.url.searchParams.get('id'))
+
+    all_mails = all_mails.map(m => {
+      if(m.id === id){
+        m.isNew = false
+      }
+      return m;
+    })
+
+    return res(
+        ctx.status(200),
+        ctx.json({ 
+          status: true,
+          message: 'Mail detail load',
+          data: all_mails.find(m => m.id === id),
+          newTotal: all_mails.filter((m) => m.isNew).length,
+          archivedTotal: all_mails.filter((m) => m.isArchived).length,
+          total: all_mails.filter((m) => !m.isArchived).length
+        })
+      )
+  }),
+
+
+
+  rest.post<any, any>('/mail/setArchived', (req, res, ctx) => {
+    const { id, isArchived } = req.body
+
+    all_mails = all_mails.map(m => {
+      if(m.id === id){
+        m.isArchived = isArchived;
+        m.isNew = false;
+      }
+      return m;
+    })
+
+    return res(
+        ctx.status(200),
+        ctx.json({ 
+          status: true,
+          message: 'Mail ' + (isArchived  ? 'Archived' : 'Rolled back')
         })
       )
   }),

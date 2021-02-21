@@ -16,7 +16,7 @@ const Home: React.FC = () => {
 	const history = useHistory();
 
 	const [mails, setMails] = useState<MailProtocol[]>([]);
-	const [mailDetailId, setMailDetailId] = useState<number>(0);
+	const [mailDetail, setMailDetail] = useState<MailProtocol | null>(null);
 
   	const [newTotal, setNewTotal] = useState(0);
   	const [archivedTotal, setArchivedTotal] = useState(0);
@@ -25,6 +25,7 @@ const Home: React.FC = () => {
 	const [isReplyEnabled, setReplyEnabled] = useState(false);
   	
   	const [isLoading, setIsLoading] = useState(true);
+  	const [refreshData, setRefreshData] = useState(false);
 
 
   	const [mailFilterType, setMailFilterType] = useState("TOTAL");
@@ -37,26 +38,26 @@ const Home: React.FC = () => {
 		    }
 
 		    try {
-		      setMailDetailId(0)
-
-		      const mails: any = await loadMails();
-		      setMails(mails.data.data);
-		      setNewTotal(mails.data.newTotal);
-		      setArchivedTotal(mails.data.archivedTotal);
-		      setTotal(mails.data.total);
+		      const response: any = await loadMails();
+		      setMails(response.data.data);
+		      setNewTotal(response.data.newTotal);
+		      setArchivedTotal(response.data.archivedTotal);
+		      setTotal(response.data.total);
 		    } catch (e) {
 		      alert(e);
 		    }
 
 		    setIsLoading(false);
+		    setRefreshData(false);
 	  	}
 	  	
 	  	onLoad();
-	}, [isAuthenticated, mailFilterType, mailFilterSearch]);
+	}, [isAuthenticated, refreshData, mailFilterType, mailFilterSearch]);
 
 	useEffect(() => {
+		renderMailList()
 		renderMailDetail()
-	}, [mails]);
+	}, [ mails ]);
 
 	const debouncedSave = useCallback(
 		debounce(newValue => setMailFilterSearch(newValue), 300),
@@ -64,6 +65,11 @@ const Home: React.FC = () => {
 	);
 	function setFilterSearch(e: React.ChangeEvent<HTMLInputElement>){
 		debouncedSave(e.target.value);
+	}
+
+	function applyMailFilter(filter: string){
+		setMailDetail(null);
+		setMailFilterType(filter);
 	}
 
 	function loadMails() {
@@ -82,7 +88,7 @@ const Home: React.FC = () => {
 	function renderMailList() {
 	    return (
 	    	mails.map(({ id, title, description, isNew, isArchived }, index) => (
-		    	<Card key={index} onClick={() => setMailDetailId(id)}>
+		    	<Card key={index} onClick={() => openMailHandler(id)}>
 				  <Card.Body className="pt-10">
 				    <Card.Title>{title}</Card.Title>
 				    <Card.Text>{description}</Card.Text>
@@ -93,8 +99,6 @@ const Home: React.FC = () => {
 	}
 
 	function renderMailDetail(){
-		let mailDetail = mails.find(m => m.id === mailDetailId);
-
 		return (
 			mailDetail ?
 
@@ -115,8 +119,8 @@ const Home: React.FC = () => {
 								<Col md={6} className="text-right">
 									<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={replyHandler}>REPLY</Button>
 									<Button type="button" className="LoaderButton btn-danger font-weight-bold m-r-10" onClick={deleteHandler}>DELETE</Button>
-									{ mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(false)}>ROLLBACK</Button> }
-									{ !mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(true)}>ARCHIVE</Button>}
+									{ mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(mailDetail.id, false)}>ROLLBACK</Button> }
+									{ !mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(mailDetail.id, true)}>ARCHIVE</Button>}
 								</Col>
 							</>
 						)
@@ -128,6 +132,18 @@ const Home: React.FC = () => {
 		)
 	}
 
+	async function openMailHandler(id: number){
+		let response = await fetchMailDetails(id);
+		if(response.status){
+			setMailDetail(response.data.data);
+			setNewTotal(response.data.newTotal);
+	      setArchivedTotal(response.data.archivedTotal);
+	      setTotal(response.data.total);
+		} else {
+			alert(response.data.message);
+		}
+	}
+
 	function replyHandler(){
 		setReplyEnabled(true);
 	}
@@ -136,13 +152,14 @@ const Home: React.FC = () => {
 
 	}
 
-	function archiveHandler(flag: boolean){
-		setMails(mails.map(m => {
-			if(m.id === mailDetailId){
-				m.isArchived = flag;
-			}
-			return m;
-		}))
+	function fetchMailDetails(id: number){
+		return axios.get('/mail/detail?id=' + id)
+	}
+
+	async function archiveHandler(id: number, isArchived: boolean){
+		await axios.post('/mail/setArchived', { id, isArchived })
+		setMailDetail(null)
+		setRefreshData(true);
 	}
 
 	function sendReplyHandler(){
@@ -159,9 +176,9 @@ const Home: React.FC = () => {
       		  <Row className="b-b-1-solid p-b-10">
 			    <Col md={8}>
 			    	<Navbar collapseOnSelect expand="md">
-				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('NEW')}>NEW : { newTotal }</button>
-				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('ARCHIVED')}>ARCHIVED : { archivedTotal }</button>
-				          <button type="button" className="font-weight-bold m-0 w-160" onClick={() => setMailFilterType('TOTAL')}>TOTAL : { total }</button>
+				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType == "NEW" ? "selected" : "")} onClick={() => applyMailFilter('NEW')}>NEW : { newTotal }</button>
+				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType == "ARCHIVED" ? "selected" : "")} onClick={() => applyMailFilter('ARCHIVED')}>ARCHIVED : { archivedTotal }</button>
+				          <button type="button" className={"font-weight-bold m-0 w-160 filter_button " + (mailFilterType == "TOTAL" ? "selected" : "")} onClick={() => applyMailFilter('TOTAL')}>TOTAL : { total }</button>
 				          <div>
 				          	<input type="text" placeholder="Search" onChange={setFilterSearch}className="search" />
 				          </div>

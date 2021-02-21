@@ -77,3 +77,7 @@ div.mails-container{
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+.filter_button:hover, .filter_button.selected{
+	background-color: lightblue;
+}
