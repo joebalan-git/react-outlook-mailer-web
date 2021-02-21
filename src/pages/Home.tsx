@@ -118,7 +118,7 @@ const Home: React.FC = () => {
 								</Col>
 								<Col md={6} className="text-right">
 									<Button type="button" className="LoaderButton btn-success font-weight-bold m-r-10" onClick={replyHandler}>REPLY</Button>
-									<Button type="button" className="LoaderButton btn-danger font-weight-bold m-r-10" onClick={deleteHandler}>DELETE</Button>
+									<Button type="button" className="LoaderButton btn-danger font-weight-bold m-r-10" onClick={() => deleteHandler(mailDetail.id)}>DELETE</Button>
 									{ mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(mailDetail.id, false)}>ROLLBACK</Button> }
 									{ !mailDetail.isArchived && <Button type="button" className="LoaderButton btn-default font-weight-bold m-0" onClick={() => archiveHandler(mailDetail.id, true)}>ARCHIVE</Button>}
 								</Col>
@@ -148,8 +148,10 @@ const Home: React.FC = () => {
 		setReplyEnabled(true);
 	}
 
-	function deleteHandler(){
-
+	async function deleteHandler(id: number){
+		await axios.delete('/mail?id=' + id)
+		setMailDetail(null)
+		setRefreshData(true);
 	}
 
 	function fetchMailDetails(id: number){

@@ -15,6 +15,13 @@ interface LoginResponse {
 */
 
 let all_mails = [...DEFAULT_MAILS];
+const getTotals = () => {
+  return {
+    newTotal: all_mails.filter((m) => m.isNew).length,
+    archivedTotal: all_mails.filter((m) => m.isArchived).length,
+    total: all_mails.filter((m) => !m.isArchived).length
+  }
+}
 
 const worker = setupWorker(
   // TODO: response was throwing error on LoginResponse so had to set it as any
@@ -61,9 +68,7 @@ const worker = setupWorker(
           status: true,
           message: 'Mails fetch success',
           data: filteredMails,
-          newTotal: all_mails.filter((m) => m.isNew).length,
-          archivedTotal: all_mails.filter((m) => m.isArchived).length,
-          total: all_mails.filter((m) => !m.isArchived).length
+          ...getTotals()
         })
       )
   }),
@@ -86,9 +91,7 @@ const worker = setupWorker(
           status: true,
           message: 'Mail detail load',
           data: all_mails.find(m => m.id === id),
-          newTotal: all_mails.filter((m) => m.isNew).length,
-          archivedTotal: all_mails.filter((m) => m.isArchived).length,
-          total: all_mails.filter((m) => !m.isArchived).length
+          ...getTotals()
         })
       )
   }),
@@ -111,6 +114,22 @@ const worker = setupWorker(
         ctx.json({ 
           status: true,
           message: 'Mail ' + (isArchived  ? 'Archived' : 'Rolled back')
+        })
+      )
+  }),
+
+
+
+  rest.delete<any, any>('/mail', (req, res, ctx) => {
+    const id: number = Number(req.url.searchParams.get('id'))
+
+    all_mails = all_mails.filter(m => m.id != id)
+
+    return res(
+        ctx.status(200),
+        ctx.json({ 
+          status: true,
+          message: 'Mail deleted'
         })
       )
   }),
