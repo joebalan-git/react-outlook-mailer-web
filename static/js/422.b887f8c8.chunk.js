@@ -1,2 +1,0 @@
-(this["webpackJsonpreact-outlook-mailer-web"]=this["webpackJsonpreact-outlook-mailer-web"]||[]).push([[422],{544:function(e,s){var a=Prism.util.clone(Prism.languages.typescript);Prism.languages.tsx=Prism.languages.extend("jsx",a)}}]);
-//# sourceMappingURL=422.b887f8c8.chunk.js.map

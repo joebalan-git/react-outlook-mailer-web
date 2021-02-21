@@ -1,2 +1,0 @@
-(this["webpackJsonpreact-outlook-mailer-web"]=this["webpackJsonpreact-outlook-mailer-web"]||[]).push([[214],{336:function(n,e){Prism.languages.jsonp=Prism.languages.extend("json",{punctuation:/[{}[\]();,.]/}),Prism.languages.insertBefore("jsonp","punctuation",{function:/[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*\()/})}}]);
-//# sourceMappingURL=214.9bbc39f2.chunk.js.map

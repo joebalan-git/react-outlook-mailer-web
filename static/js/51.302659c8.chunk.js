@@ -1,2 +1,0 @@
-(this["webpackJsonpreact-outlook-mailer-web"]=this["webpackJsonpreact-outlook-mailer-web"]||[]).push([[51],{173:function(e,a){Prism.languages.brainfuck={pointer:{pattern:/<|>/,alias:"keyword"},increment:{pattern:/\+/,alias:"inserted"},decrement:{pattern:/-/,alias:"deleted"},branching:{pattern:/\[|\]/,alias:"important"},operator:/[.,]/,comment:/\S+/}}}]);
-//# sourceMappingURL=51.302659c8.chunk.js.map

@@ -1,2 +1,0 @@
-(this["webpackJsonpreact-outlook-mailer-web"]=this["webpackJsonpreact-outlook-mailer-web"]||[]).push([[136],{258:function(e,t){Prism.languages.gcode={comment:/;.*|\B\(.*?\)\B/,string:{pattern:/"(?:""|[^"])*"/,greedy:!0},keyword:/\b[GM]\d+(?:\.\d+)?\b/,property:/\b[A-Z]/,checksum:{pattern:/\*\d+/,alias:"punctuation"},punctuation:/:/}}}]);
-//# sourceMappingURL=136.0d0e5da9.chunk.js.map
